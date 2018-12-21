@@ -1,2 +1,2 @@
 # Tensorflow_Keras
-I this repo, I am updating tensorflow keras scripts
+In this repo, I am updating tensorflow keras scripts
