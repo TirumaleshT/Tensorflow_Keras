@@ -1,0 +1,320 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Untitled5.ipynb",
+      "version": "0.3.2",
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/TirumaleshT/Tensorflow_Keras/blob/master/Iris_nn\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "metadata": {
+        "id": "0srj5WHoQvDb",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "cell_type": "code",
+      "source": [
+        "from keras.models import Sequential\n",
+        "from keras.layers import Dense\n",
+        "from keras.utils import to_categorical\n",
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "import matplotlib.pyplot as plt\n",
+        "from sklearn import model_selection"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "7irSjQrZRZiy",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "cell_type": "code",
+      "source": [
+        "#Load iris data\n",
+        "\n",
+        "columns=['sepal length', 'sepal width','petal length', 'petal width', 'class']\n",
+        "iris = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data', delimiter=',', names=columns)\n",
+        "\n",
+        "iris.dropna(inplace=True)\n",
+        "\n",
+        "#Converting iris categories into intergers. 0-setosa, 1-versicolor and 2-virginica\n",
+        "iris.loc[iris['class']=='Iris-setosa','class']=0\n",
+        "iris.loc[iris['class']=='Iris-versicolor','class']=1\n",
+        "iris.loc[iris['class']=='Iris-virginica','class'] = 2\n",
+        "\n",
+        "iris_features = iris.iloc[:,:4].values\n",
+        "iris_labels = iris.iloc[:,4].values\n",
+        "\n",
+        "\n"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "LjRgoqptTH2B",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "cell_type": "code",
+      "source": [
+        "#Splitting data into train and test data\n",
+        "iris_features_train, iris_features_test, iris_labels_train, iris_labels_test = model_selection.train_test_split(iris_features, iris_labels, test_size=0.1)\n",
+        "\n",
+        "iris_labels_cat_train = to_categorical(iris_labels_train,3)\n",
+        "iris_labels_cat_test = to_categorical(iris_labels_test,3)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "AX4ndYE-TyCQ",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "cell_type": "code",
+      "source": [
+        "#Neural network\n",
+        "model = Sequential()\n",
+        "\n",
+        "model.add(Dense(4, activation='sigmoid'))\n",
+        "model.add(Dense(32, activation='sigmoid'))\n",
+        "model.add(Dense(3, activation='softmax'))\n",
+        "\n",
+        "model.compile(loss = 'categorical_crossentropy',\n",
+        "             optimizer = 'rmsprop',\n",
+        "             metrics = ['accuracy'])"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "goxjS25rjsRR",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1054
+        },
+        "outputId": "ea93fc69-ac13-453d-9c5f-dd9b20048e31"
+      },
+      "cell_type": "code",
+      "source": [
+        "model.fit(iris_features_train, iris_labels_cat_train, epochs=30)"
+      ],
+      "execution_count": 150,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Epoch 1/30\n",
+            "135/135 [==============================] - 1s 4ms/step - loss: 1.2393 - acc: 0.3259\n",
+            "Epoch 2/30\n",
+            "135/135 [==============================] - 0s 92us/step - loss: 1.1807 - acc: 0.3259\n",
+            "Epoch 3/30\n",
+            "135/135 [==============================] - 0s 71us/step - loss: 1.1484 - acc: 0.3259\n",
+            "Epoch 4/30\n",
+            "135/135 [==============================] - 0s 72us/step - loss: 1.1276 - acc: 0.3259\n",
+            "Epoch 5/30\n",
+            "135/135 [==============================] - 0s 100us/step - loss: 1.1113 - acc: 0.3259\n",
+            "Epoch 6/30\n",
+            "135/135 [==============================] - 0s 83us/step - loss: 1.1033 - acc: 0.3259\n",
+            "Epoch 7/30\n",
+            "135/135 [==============================] - 0s 88us/step - loss: 1.0921 - acc: 0.3259\n",
+            "Epoch 8/30\n",
+            "135/135 [==============================] - 0s 88us/step - loss: 1.0881 - acc: 0.3333\n",
+            "Epoch 9/30\n",
+            "135/135 [==============================] - 0s 90us/step - loss: 1.0898 - acc: 0.5185\n",
+            "Epoch 10/30\n",
+            "135/135 [==============================] - 0s 82us/step - loss: 1.0817 - acc: 0.6519\n",
+            "Epoch 11/30\n",
+            "135/135 [==============================] - 0s 84us/step - loss: 1.0784 - acc: 0.3111\n",
+            "Epoch 12/30\n",
+            "135/135 [==============================] - 0s 125us/step - loss: 1.0775 - acc: 0.6519\n",
+            "Epoch 13/30\n",
+            "135/135 [==============================] - 0s 79us/step - loss: 1.0739 - acc: 0.6222\n",
+            "Epoch 14/30\n",
+            "135/135 [==============================] - 0s 96us/step - loss: 1.0706 - acc: 0.6741\n",
+            "Epoch 15/30\n",
+            "135/135 [==============================] - 0s 118us/step - loss: 1.0700 - acc: 0.6741\n",
+            "Epoch 16/30\n",
+            "135/135 [==============================] - 0s 140us/step - loss: 1.0678 - acc: 0.6370\n",
+            "Epoch 17/30\n",
+            "135/135 [==============================] - 0s 143us/step - loss: 1.0633 - acc: 0.6667\n",
+            "Epoch 18/30\n",
+            "135/135 [==============================] - 0s 103us/step - loss: 1.0604 - acc: 0.6741\n",
+            "Epoch 19/30\n",
+            "135/135 [==============================] - 0s 167us/step - loss: 1.0573 - acc: 0.6741\n",
+            "Epoch 20/30\n",
+            "135/135 [==============================] - 0s 91us/step - loss: 1.0543 - acc: 0.6741\n",
+            "Epoch 21/30\n",
+            "135/135 [==============================] - 0s 107us/step - loss: 1.0530 - acc: 0.6593\n",
+            "Epoch 22/30\n",
+            "135/135 [==============================] - 0s 72us/step - loss: 1.0483 - acc: 0.6593\n",
+            "Epoch 23/30\n",
+            "135/135 [==============================] - 0s 97us/step - loss: 1.0461 - acc: 0.6000\n",
+            "Epoch 24/30\n",
+            "135/135 [==============================] - 0s 82us/step - loss: 1.0417 - acc: 0.6741\n",
+            "Epoch 25/30\n",
+            "135/135 [==============================] - 0s 82us/step - loss: 1.0381 - acc: 0.6370\n",
+            "Epoch 26/30\n",
+            "135/135 [==============================] - 0s 115us/step - loss: 1.0332 - acc: 0.6593\n",
+            "Epoch 27/30\n",
+            "135/135 [==============================] - 0s 113us/step - loss: 1.0309 - acc: 0.6667\n",
+            "Epoch 28/30\n",
+            "135/135 [==============================] - 0s 98us/step - loss: 1.0244 - acc: 0.6519\n",
+            "Epoch 29/30\n",
+            "135/135 [==============================] - 0s 74us/step - loss: 1.0204 - acc: 0.6741\n",
+            "Epoch 30/30\n",
+            "135/135 [==============================] - 0s 69us/step - loss: 1.0165 - acc: 0.6741\n"
+          ],
+          "name": "stdout"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "<keras.callbacks.History at 0x7f46e0decf98>"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 150
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "id": "KRf1d3yCJuZO",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "cell_type": "code",
+      "source": [
+        "pred = model.predict_classes(iris_features_test)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "FpqRwTBAJ6oF",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "outputId": "de7b9c47-e0f7-4a36-dafd-a063cb21420f"
+      },
+      "cell_type": "code",
+      "source": [
+        "pred"
+      ],
+      "execution_count": 152,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array([1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1])"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 152
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "id": "b2z6VHq6Lqg5",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "outputId": "3620a62e-29ff-4fa2-8796-234c0df56785"
+      },
+      "cell_type": "code",
+      "source": [
+        "iris_labels_test"
+      ],
+      "execution_count": 153,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array([2, 2, 0, 2, 2, 1, 2, 0, 0, 1, 0, 2, 0, 0, 1])"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 153
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "id": "_6YMWrVqKDnC",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 51
+        },
+        "outputId": "5215be47-1e19-423e-fa61-31f81d857b36"
+      },
+      "cell_type": "code",
+      "source": [
+        "model.evaluate(iris_features_test, iris_labels_cat_test)"
+      ],
+      "execution_count": 156,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "\r15/15 [==============================] - 0s 13ms/step\n"
+          ],
+          "name": "stdout"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[1.0212562084197998, 0.6000000238418579]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 156
+        }
+      ]
+    }
+  ]
+}
